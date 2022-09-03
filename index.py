@@ -20,7 +20,7 @@ client = discord.Client(intents=intents)
 @client.event
 async def on_ready():
     user = await client.fetch_user(karuna_id)
-    # await user.send('Required daily solutions ain\'t uploaded!')
+    await user.send('Required amount of solutions ain\'t uploaded!')
     await client.close()
 
 response = requests.post('https://api.notion.com/v1/databases/' + notion_database_id + '/query',
