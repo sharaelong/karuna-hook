@@ -38,6 +38,7 @@ jobs:
           DAILY_GOAL: ${{ secrets.DAILY_GOAL }}
           DISCORD_LOGIN_TOKEN: ${{ secrets.DISCORD_LOGIN_TOKEN }}
           KARUNA_ID: ${{ secrets.KARUNA_ID }}
+          TIME_INTERVAL: ${{ secrets.TIME_INTERVAL }}
         run: |
           pip install -r requirements.txt
           python index.py
