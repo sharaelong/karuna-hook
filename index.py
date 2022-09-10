@@ -5,6 +5,7 @@ from datetime import datetime
 from dotenv import load_dotenv
 import discord
 import requests
+import json
 
 load_dotenv()
 notion_database_id = os.getenv('NOTION_DATABASE_ID')
@@ -16,14 +17,15 @@ karuna_id = os.getenv('KARUNA_ID')
 time_interval = int(os.getenv('TIME_INTERVAL'))
 
 # Check Notion documents
+headers = {'Authorization': 'Bearer ' + notion_auth_token, 'Notion-Version': notion_version, 'Content-Type': 'application/json'}
+data = {'sorts':[{'timestamp': 'last_edited_time', 'direction': 'descending'}]}
 response = requests.post('https://api.notion.com/v1/databases/' + notion_database_id + '/query',
-                         headers={'Authorization': 'Bearer ' + notion_auth_token,
-                                  'Notion-Version': notion_version})
+                         headers=headers, data=json.dumps(data))
 response = response.json()
 last_edited_time = response['results'][daily_goal-1]['last_edited_time']
 target_date = datetime.fromisoformat(last_edited_time[:-1])
 curr_date = datetime.utcnow()
-is_success = (curr_date-target_date).seconds <= time_interval
+is_success = (curr_date-target_date).total_seconds() <= time_interval
 
 # Get solved.ac problems
 response = requests.get('https://solved.ac/api/v3/user/problem_stats?handle=jhwest2').json()
